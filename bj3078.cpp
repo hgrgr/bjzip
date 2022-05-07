@@ -1,32 +1,37 @@
 #include <iostream>
 #include <cstring>
+#include <map>
+#include <string>
 using namespace std;
 typedef long long ll;
-int n,k;
-ll xarr[4000001];
+map<ll,ll> m_map;
+ll arr[300001];
+ll n, k;
 int main(){
-    ios_base::sync_with_stdio(false);
-    cin.tie(0);
     cin >> n >> k;
-    ll g,x;
-    memset(xarr,0,sizeof(xarr));
-    for(int i=0;i<n;i++)
-    {
-        cin >> g >> x;
-        xarr[x] = g;
+    string str;
+    for(int i=0; i<n;i++){
+        cin >> str;
+        arr[i] = str.length();
+    }
+    for(int i=0; i<=k;i++){
+        m_map[arr[i]]++;
     }
     ll total = 0;
-    for(int i=0;i<=k*2;i++){
-        total += xarr[i];
+    ll st,end;
+    st = 0, end = k;
+    for(int i=0;i<n;i++){
+        if(end < n){
+            //cout << " total = " << total << " i = " << i << endl;
+            total += m_map[arr[i]]-1; 
+            m_map[arr[st++]]--;
+            m_map[arr[++end]]++;
+        }
+        else if(end == n && st != end){
+            total += m_map[arr[i]]-1; 
+            m_map[arr[st++]]--;
+        }
     }
-    ll mx = total;
-    ll st = 0, end = 2*k;
-    for(int i=0;i+k*2<4000001;i++){
-        mx = max(mx,total); 
-        total -= xarr[st++];
-        total += xarr[++end];
-    }
-    cout << mx;
-
+    cout << total;
     return 0;
 }
